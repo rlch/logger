@@ -23,7 +23,12 @@ class LogEvent {
   final dynamic error;
   final StackTrace? stackTrace;
 
-  LogEvent(this.level, this.message, this.error, this.stackTrace);
+  LogEvent(
+    this.level,
+    this.message,
+    this.error,
+    this.stackTrace,
+  );
 }
 
 class OutputEvent {
@@ -50,6 +55,7 @@ class Logger {
   final LogPrinter _printer;
   final LogOutput _output;
   bool _active = true;
+  List<String>? _scopes;
 
   /// Create a new instance of Logger.
   ///
@@ -110,9 +116,14 @@ class Logger {
     } else if (level == Level.nothing) {
       throw ArgumentError('Log events cannot have Level.nothing');
     }
-    var logEvent = LogEvent(level, message, error, stackTrace);
+    var logEvent = LogEvent(
+      level,
+      message,
+      error,
+      stackTrace,
+    );
     if (_filter.shouldLog(logEvent)) {
-      var output = _printer.log(logEvent);
+      var output = _printer.log(logEvent, _scopes);
 
       if (output.isNotEmpty) {
         var outputEvent = OutputEvent(level, output);
@@ -134,5 +145,22 @@ class Logger {
     _filter.destroy();
     _printer.destroy();
     _output.destroy();
+  }
+
+  Logger _withScope(String scope) {
+    return Logger(
+      filter: _filter,
+      printer: _printer,
+      output: _output,
+      level: level,
+    ).._scopes = [...?_scopes, scope];
+  }
+
+  Logger operator [](dynamic scope) {
+    if (scope?.toString().isEmpty ?? true) {
+      return this;
+    } else {
+      return _withScope(scope.toString());
+    }
   }
 }

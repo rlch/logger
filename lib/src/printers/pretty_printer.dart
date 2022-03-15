@@ -120,7 +120,7 @@ class PrettyPrinter extends LogPrinter {
   }
 
   @override
-  List<String> log(LogEvent event) {
+  List<String> log(LogEvent event, [scope]) {
     var messageStr = stringifyMessage(event.message);
 
     String? stackTraceStr;

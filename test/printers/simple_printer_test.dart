@@ -1,4 +1,3 @@
-import 'package:logger/src/printers/simple_printer.dart';
 import 'package:test/test.dart';
 import 'package:logger/logger.dart';
 
@@ -72,6 +71,20 @@ void main() {
     expect(
       plainPrinter.log(withMap)[0],
       '[D]  {"foo":123}  ERROR: some error',
+    );
+  });
+
+  test('deal with non-null scope', () {
+    var withMap = LogEvent(
+      Level.debug,
+      'message',
+      'some error',
+      StackTrace.current,
+    );
+
+    expect(
+      plainPrinter.log(withMap, ['feature1', 'function2'])[0],
+      '[D: feature1 > function2]  message  ERROR: some error',
     );
   });
 

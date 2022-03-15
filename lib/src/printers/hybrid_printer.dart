@@ -1,6 +1,4 @@
 import 'package:logger/logger.dart';
-import 'package:logger/src/logger.dart';
-import 'package:logger/src/log_printer.dart';
 
 /// A decorator for a [LogPrinter] that allows for the composition of
 /// different printers to handle different log messages. Provide it's
@@ -30,5 +28,6 @@ class HybridPrinter extends LogPrinter {
   }
 
   @override
-  List<String> log(LogEvent event) => _printerMap[event.level].log(event);
+  List<String> log(LogEvent event, [scope]) =>
+      _printerMap[event.level].log(event);
 }

@@ -1,6 +1,5 @@
 import 'package:test/test.dart';
 
-import 'package:logger/src/printers/hybrid_printer.dart';
 import 'package:logger/logger.dart';
 
 final realPrinter = SimplePrinter();
@@ -8,9 +7,9 @@ final realPrinter = SimplePrinter();
 class TestLogPrinter extends LogPrinter {
   LogEvent? latestEvent;
   @override
-  List<String> log(LogEvent event) {
+  List<String> log(LogEvent event, [List<String>? scope]) {
     latestEvent = event;
-    return realPrinter.log(event);
+    return realPrinter.log(event, scope);
   }
 }
 

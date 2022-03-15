@@ -26,7 +26,7 @@ class _CallbackPrinter extends LogPrinter {
   _CallbackPrinter(this.callback);
 
   @override
-  List<String> log(LogEvent event) {
+  List<String> log(LogEvent event, [List<String>? scope]) {
     return callback(
       event.level,
       event.message,

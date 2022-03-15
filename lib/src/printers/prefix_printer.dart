@@ -31,8 +31,8 @@ class PrefixPrinter extends LogPrinter {
   }
 
   @override
-  List<String> log(LogEvent event) {
-    var realLogs = _realPrinter.log(event);
+  List<String> log(LogEvent event, [scope]) {
+    var realLogs = _realPrinter.log(event, scope);
     return realLogs.map((s) => '${_prefixMap[event.level]}$s').toList();
   }
 

@@ -6,16 +6,16 @@ import 'package:logger/src/ansi_color.dart';
 
 /// Outputs simple log messages:
 /// ```
-/// [E] Log message  ERROR: Error info
+/// [E: scope] Log message  ERROR: Error info
 /// ```
 class SimplePrinter extends LogPrinter {
   static final levelPrefixes = {
-    Level.verbose: '[V]',
-    Level.debug: '[D]',
-    Level.info: '[I]',
-    Level.warning: '[W]',
-    Level.error: '[E]',
-    Level.wtf: '[WTF]',
+    Level.verbose: 'V',
+    Level.debug: 'D',
+    Level.info: 'I',
+    Level.warning: 'W',
+    Level.error: 'E',
+    Level.wtf: 'WTF',
   };
 
   static final levelColors = {
@@ -33,11 +33,18 @@ class SimplePrinter extends LogPrinter {
   SimplePrinter({this.printTime = false, this.colors = true});
 
   @override
-  List<String> log(LogEvent event) {
+  List<String> log(LogEvent event, [scopes]) {
     var messageStr = _stringifyMessage(event.message);
     var errorStr = event.error != null ? '  ERROR: ${event.error}' : '';
     var timeStr = printTime ? 'TIME: ${DateTime.now().toIso8601String()}' : '';
-    return ['${_labelFor(event.level)} $timeStr $messageStr$errorStr'];
+
+    var bracketed = _labelFor(event.level);
+    if (scopes != null) {
+      bracketed += ': ${scopes.join(" > ")}';
+    }
+    bracketed = '[$bracketed]';
+
+    return ['$bracketed $timeStr $messageStr$errorStr'];
   }
 
   String _labelFor(Level level) {

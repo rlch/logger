@@ -1,4 +1,3 @@
-import 'package:logger/src/printers/prefix_printer.dart';
 import 'package:test/test.dart';
 
 import 'package:logger/logger.dart';
